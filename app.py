@@ -11,7 +11,7 @@ def main():
     headers = {"Authorization": f"Bearer {token}"}
 
     response = requests.get(
-        f"https://www.strava.com/api/v3/athlete/activities", headers=headers
+        f"https://www.strava.com/api/v3/athlete", headers=headers
     )
 
     r.raise_for_status()
