@@ -39,6 +39,10 @@ with app.app_context():
 
 @app.route("/")
 def home():
+    exists = db.session.query(User).filter_by(user_id=app.config["STRAVA_CLIENT_ID"]).first() is not None
+
+    if exists:
+        return "USER LOGGED IN"
     return render_template("home.html")
 
 
@@ -67,6 +71,7 @@ def exchange_token(code):
     response = strava_request.json()
     # TODO: separate out into sep func with dict unpacking of athlete
     user = User(
+        user_id = app.config["STRAVA_CLIENT_ID"],
         username = response["athlete"]["username"],
         firstname = response["athlete"]["firstname"],
         lastname = response["athlete"]["lastname"],

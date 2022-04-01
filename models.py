@@ -3,7 +3,7 @@ from app import db
 
 class User(UserMixin, db.Model):
     __tablename__ = "users"
-    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64))
     firstname = db.Column(db.String(64))
     lastname = db.Column(db.String(64))
@@ -13,6 +13,7 @@ class User(UserMixin, db.Model):
     profile = db.Column(db.String(128))
     weight = db.Column(db.Integer)
 
+    # TODO: more secure alternative to storing tokens in db?
     access_token = db.Column(db.String(128), unique=True, index=True)
     refresh_token = db.Column(db.String(128), unique=True, index=True)
 
