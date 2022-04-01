@@ -8,6 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+# TODO: resolve circular imports
+from models import User
 
 def read_secrets(secret_path):
     try:
@@ -59,6 +61,26 @@ def exchange_token(code):
             'grant_type': 'authorization_code'
         }
     )
+
+    response = strava_request.json()
+    # TODO: separate out into sep func with dict unpacking of athlete
+    user = User(
+        username = response["athlete"]["username"],
+        firstname = response["athlete"]["firstname"],
+        lastname = response["athlete"]["lastname"],
+        sex = response["athlete"]["sex"],
+        city = response["athlete"]["city"],
+        country = response["athlete"]["country"],
+        profile = response["athlete"]["profile"],
+        weight = response["athlete"]["weight"],
+
+        access_token = response["access_token"],
+        refresh_token = response["refresh_token"],
+        expires_at = response["expires_at"]
+    )
+    db.session.add(user)
+    db.session.commit()
+
     return jsonify(strava_request.json())
 
 
