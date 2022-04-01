@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-# TODO: resolve circular imports
+# TODO: resolve circular imports through refactor
 from models import User
 
 def read_secrets(secret_path):
@@ -33,6 +33,8 @@ def create_app() -> Flask:
 
 
 app = create_app()
+with app.app_context():
+    db.create_all()
 
 
 @app.route("/")
@@ -81,7 +83,8 @@ def exchange_token(code):
     db.session.add(user)
     db.session.commit()
 
-    return jsonify(strava_request.json())
+    #return jsonify(strava_request.json())
+    return redirect(url_for("home"))
 
 
 @app.route("/token")
